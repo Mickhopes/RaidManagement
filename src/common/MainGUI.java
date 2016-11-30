@@ -39,7 +39,9 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.text.DefaultCaret;
 
-public class Parser extends JFrame {
+import business.Loot;
+
+public class MainGUI extends JFrame {
 	static final int HEIGHT = 600;
 	static final int WIDTH = 800;
 	static final String[] upgrades = { "Upgrade", "Mini-upgrade", "Spé2", "Transmo", "Passer", "Hors ligne" };
@@ -51,7 +53,7 @@ public class Parser extends JFrame {
 	private File fichier;
 	private ArrayList<Loot> lLoot;
 
-	public Parser(String title) {
+	public MainGUI(String title) {
 		super(title);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -80,7 +82,7 @@ public class Parser extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				final JFileChooser fc = new JFileChooser();
-				int r = fc.showOpenDialog(Parser.this);
+				int r = fc.showOpenDialog(MainGUI.this);
 
 				if (r == JFileChooser.APPROVE_OPTION) {
 					fichier = fc.getSelectedFile();
@@ -99,7 +101,7 @@ public class Parser extends JFrame {
 				if (fichier != null) {
 					parse();
 				} else {
-					JOptionPane.showMessageDialog(Parser.this, "Vous devez sélectionner un fichier à parser", "Erreur",
+					JOptionPane.showMessageDialog(MainGUI.this, "Vous devez sélectionner un fichier à parser", "Erreur",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -320,7 +322,7 @@ public class Parser extends JFrame {
 		pAjout.add(pUp);
 		
 		int r = JOptionPane.showOptionDialog(
-                Parser.this, 
+                MainGUI.this, 
                 pAjout, 
                 "Ajouter un loot", 
                 JOptionPane.YES_NO_OPTION, 
