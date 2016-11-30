@@ -30,12 +30,16 @@ import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.text.DefaultCaret;
 
@@ -56,6 +60,16 @@ public class MainGUI extends JFrame {
 	public MainGUI(String title) {
 		super(title);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		
+		// MenuBar
+		JMenuBar menuBar = new JMenuBar();
+		JMenu menuFichier = new JMenu("Fichier");
+		JMenuItem menuItemOpen = new JMenuItem("Ouvrir");
+		menuItemOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
+		
+		menuFichier.add(menuItemOpen);
+		menuBar.add(menuFichier);
+		setJMenuBar(menuBar);
 
 		// Initialisation des attributs
 		lLoot = new ArrayList<>();
