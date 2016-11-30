@@ -14,7 +14,7 @@ public class Main {
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				new Parser("Parser RCLootCouncil").setVisible(true);
+				new MainGUI("Parser RCLootCouncil").setVisible(true);
 			}
 		});
 	}
