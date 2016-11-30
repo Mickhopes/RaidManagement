@@ -189,8 +189,8 @@ public class MainGUI extends JFrame {
 
 		pGlobal.add(pBas, BorderLayout.SOUTH);
 
-		onglets.add("Loots", pGlobal);
-		onglets.add("Compo", new JPanel());
+		onglets.add("Loot", pGlobal);
+		onglets.add("Composition", new JPanel());
 		add(onglets);
 
 		//add(pGlobal);
