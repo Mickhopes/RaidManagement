@@ -74,13 +74,7 @@ public class LootPanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				final JFileChooser fc = new JFileChooser();
-				int r = fc.showOpenDialog(parent);
-
-				if (r == JFileChooser.APPROVE_OPTION) {
-					fichier = fc.getSelectedFile();
-					lNomFichier.setText(fichier.getName());
-				}
+				ouvrirFichier();
 			}
 
 		});
@@ -694,5 +688,15 @@ public class LootPanel extends JPanel {
 			pane = (JOptionPane) parent;
 		}
 		return pane;
+	}
+	
+	public void ouvrirFichier() {
+		final JFileChooser fc = new JFileChooser();
+		int r = fc.showOpenDialog(parent);
+
+		if (r == JFileChooser.APPROVE_OPTION) {
+			fichier = fc.getSelectedFile();
+			lNomFichier.setText(fichier.getName());
+		}
 	}
 }

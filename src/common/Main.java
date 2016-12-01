@@ -16,7 +16,7 @@ public class Main {
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				new MainGUI("Parser RCLootCouncil").setVisible(true);
+				new MainGUI("Raid Management").setVisible(true);
 			}
 		});
 	}
