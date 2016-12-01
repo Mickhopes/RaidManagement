@@ -1,4 +1,4 @@
-package common;
+package business;
 
 import java.util.Date;
 

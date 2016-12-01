@@ -3,6 +3,8 @@ package common;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import gui.MainGUI;
+
 public class Main {
 	public static void main(String[] args) {
 		try {
@@ -14,7 +16,7 @@ public class Main {
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				new Parser("Parser RCLootCouncil").setVisible(true);
+				new MainGUI("Raid Management").setVisible(true);
 			}
 		});
 	}

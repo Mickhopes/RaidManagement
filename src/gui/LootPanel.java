@@ -1,4 +1,4 @@
-package common;
+package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -33,16 +33,16 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.text.DefaultCaret;
 
-public class Parser extends JFrame {
-	static final int HEIGHT = 600;
-	static final int WIDTH = 800;
+import business.Loot;
+
+public class LootPanel extends JPanel {
 	static final String[] upgrades = { "Upgrade", "Mini-upgrade", "Spé2", "Transmo", "Passer", "Hors ligne" };
+
+	private JFrame parent;
 
 	private JPanel pLoot;
 	private JTextField lNomFichier;
@@ -51,19 +51,14 @@ public class Parser extends JFrame {
 	private File fichier;
 	private ArrayList<Loot> lLoot;
 
-	public Parser(String title) {
-		super(title);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+	public LootPanel(JFrame parent) {
+		this.parent = parent;
 
 		// Initialisation des attributs
 		lLoot = new ArrayList<>();
 		fichier = null;
-		
-		// Création des onglets
-		JTabbedPane onglets = new JTabbedPane(SwingConstants.TOP);
 
-		// Création du panel de base
-		JPanel pGlobal = new JPanel(new BorderLayout());
+		this.setLayout(new BorderLayout());
 
 		// Création du panel de sélection de fichier à parser
 		JPanel pSelection = new JPanel();
@@ -79,13 +74,7 @@ public class Parser extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				final JFileChooser fc = new JFileChooser();
-				int r = fc.showOpenDialog(Parser.this);
-
-				if (r == JFileChooser.APPROVE_OPTION) {
-					fichier = fc.getSelectedFile();
-					lNomFichier.setText(fichier.getName());
-				}
+				ouvrirFichier();
 			}
 
 		});
@@ -99,7 +88,7 @@ public class Parser extends JFrame {
 				if (fichier != null) {
 					parse();
 				} else {
-					JOptionPane.showMessageDialog(Parser.this, "Vous devez sélectionner un fichier à parser", "Erreur",
+					JOptionPane.showMessageDialog(parent, "Vous devez sélectionner un fichier à parser", "Erreur",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -115,7 +104,7 @@ public class Parser extends JFrame {
 
 		pSelection.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-		pGlobal.add(pSelection, BorderLayout.NORTH);
+		this.add(pSelection, BorderLayout.NORTH);
 
 		// Création du panel d'affichage des loots
 		pLoot = new JPanel();
@@ -126,30 +115,30 @@ public class Parser extends JFrame {
 		pScroll.setPreferredSize(new Dimension(pScroll.getWidth(), 400));
 		pScroll.getVerticalScrollBar().setUnitIncrement(16);
 
-		pGlobal.add(pScroll, BorderLayout.CENTER);
+		this.add(pScroll, BorderLayout.CENTER);
 
 		// Création du panel d'ajout de loot et de génération des résultats
 		JPanel pBas = new JPanel(new BorderLayout());
-		
+
 		JPanel pAjout = new JPanel();
-		
+
 		JButton bAjout = new JButton("Ajouter");
 		bAjout.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				afficherFenetreAjout();
 			}
-			
+
 		});
-		
+
 		pAjout.add(bAjout);
-		
+
 		pBas.add(pAjout, BorderLayout.WEST);
-		
+
 		// Création du panel contenant les boutons de résultat
 		JPanel pGenerer = new JPanel();
-		
+
 		cTri = new JCheckBox("Upgrade uniquement");
 		cTri.setSelected(true);
 
@@ -163,18 +152,18 @@ public class Parser extends JFrame {
 			}
 
 		});
-		
+
 		// Création du jbutton de génération des points ninjacup
 		JButton bPoints = new JButton("Points");
 		bPoints.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				genererPoints();
 			}
-			
+
 		});
-		
+
 		pGenerer.add(cTri);
 		pGenerer.add(Box.createRigidArea(new Dimension(10, 0)));
 		pGenerer.add(bRecap);
@@ -185,18 +174,9 @@ public class Parser extends JFrame {
 
 		pBas.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-		pGlobal.add(pBas, BorderLayout.SOUTH);
-
-		onglets.add("Loots", pGlobal);
-		onglets.add("Compo", new JPanel());
-		add(onglets);
-
-		//add(pGlobal);
-
-		setMinimumSize(new Dimension(WIDTH, HEIGHT));
-		pack();
+		this.add(pBas, BorderLayout.SOUTH);
 	}
-	
+
 	private void afficherFenetreAjout() {
 		// Création du panel de d'ajout
 		JPanel pAjout = new JPanel();
@@ -209,7 +189,7 @@ public class Parser extends JFrame {
 		pNomJoueur.add(lNomJoueur, BorderLayout.WEST);
 		pNomJoueur.add(tNomJoueur, BorderLayout.EAST);
 		pNomJoueur.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-		
+
 		// Création du label de nom de boss
 		JPanel pNomBoss = new JPanel(new BorderLayout());
 		JLabel lNomBoss = new JLabel("Boss * :");
@@ -225,7 +205,7 @@ public class Parser extends JFrame {
 		pNomItem.add(lNomItem, BorderLayout.WEST);
 		pNomItem.add(tNomItem, BorderLayout.EAST);
 		pNomItem.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-		
+
 		// Création du label de nom de joueur
 		JPanel pItemId = new JPanel(new BorderLayout());
 		JLabel lItemId = new JLabel("ID de l'item :");
@@ -233,7 +213,7 @@ public class Parser extends JFrame {
 		pItemId.add(lItemId, BorderLayout.WEST);
 		pItemId.add(tItemId, BorderLayout.EAST);
 		pItemId.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-				
+
 		// Création du label de nom de joueur
 		JPanel pItemBonus = new JPanel(new BorderLayout());
 		JLabel lItemBonus = new JLabel("Bonus de l'item :");
@@ -249,11 +229,11 @@ public class Parser extends JFrame {
 		pUp.add(lUp, BorderLayout.WEST);
 		pUp.add(cbUp, BorderLayout.EAST);
 		pUp.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-		
+
 		// Création de la combobox pour la difficulte
 		JPanel pDiff = new JPanel(new BorderLayout());
 		JLabel lDiff = new JLabel("Difficulté * :");
-		String[] diff = {"Normal", "Héroïque", "Mythique"};
+		String[] diff = { "Normal", "Héroïque", "Mythique" };
 		JComboBox<String> cbDiff = new JComboBox<>(diff);
 		cbDiff.setPreferredSize(cbUp.getPreferredSize());
 		pDiff.add(lDiff, BorderLayout.WEST);
@@ -264,26 +244,26 @@ public class Parser extends JFrame {
 		JButton bAjout = new JButton("Ajouter");
 		bAjout.setEnabled(false);
 		bAjout.addActionListener(new ActionListener() {
-			
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane pane = getOptionPane((JComponent)e.getSource());
-                pane.setValue(bAjout);
-            }
-            
-        });
-		
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane pane = getOptionPane((JComponent) e.getSource());
+				pane.setValue(bAjout);
+			}
+
+		});
+
 		// Création du bouton annuler
 		JButton bAnnuler = new JButton("Annuler");
 		bAnnuler.addActionListener(new ActionListener() {
-			
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane pane = getOptionPane((JComponent)e.getSource());
-                pane.setValue(bAnnuler);
-            }
-            
-        });
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane pane = getOptionPane((JComponent) e.getSource());
+				pane.setValue(bAnnuler);
+			}
+
+		});
 
 		// Création du KeyListener pour les labels
 		KeyListener kl = new KeyListener() {
@@ -318,21 +298,14 @@ public class Parser extends JFrame {
 		pAjout.add(pNomBoss);
 		pAjout.add(pDiff);
 		pAjout.add(pUp);
-		
-		int r = JOptionPane.showOptionDialog(
-                Parser.this, 
-                pAjout, 
-                "Ajouter un loot", 
-                JOptionPane.YES_NO_OPTION, 
-                JOptionPane.PLAIN_MESSAGE, 
-                null, 
-                new Object[]{bAnnuler, bAjout}, 
-                bAjout);
-		
+
+		int r = JOptionPane.showOptionDialog(parent, pAjout, "Ajouter un loot", JOptionPane.YES_NO_OPTION,
+				JOptionPane.PLAIN_MESSAGE, null, new Object[] { bAnnuler, bAjout }, bAjout);
+
 		if (r == JOptionPane.NO_OPTION) {
 			int itemId = -1;
 			int bonus = -1;
-			
+
 			if (!tItemId.getText().equals("")) {
 				try {
 					itemId = Integer.parseInt(tItemId.getText());
@@ -340,7 +313,7 @@ public class Parser extends JFrame {
 					itemId = -1;
 				}
 			}
-			
+
 			if (!tItemBonus.getText().equals("")) {
 				try {
 					bonus = Integer.parseInt(tItemBonus.getText());
@@ -348,8 +321,9 @@ public class Parser extends JFrame {
 					bonus = -1;
 				}
 			}
-			
-			Loot l = new Loot(tNomJoueur.getText(), new Date(), tNomItem.getText(), itemId, bonus, tNomBoss.getText(), (String)cbDiff.getSelectedItem(), (String)cbUp.getSelectedItem());
+
+			Loot l = new Loot(tNomJoueur.getText(), new Date(), tNomItem.getText(), itemId, bonus, tNomBoss.getText(),
+					(String) cbDiff.getSelectedItem(), (String) cbUp.getSelectedItem());
 			ajoutLoot(l);
 		}
 	}
@@ -362,9 +336,9 @@ public class Parser extends JFrame {
 	}
 
 	private void supprimerLoot(Loot l, JPanel panel) {
-			lLoot.remove(l);
+		lLoot.remove(l);
 
-			refreshListe();
+		refreshListe();
 	}
 
 	private void refreshListe() {
@@ -445,27 +419,24 @@ public class Parser extends JFrame {
 			pLoot.add(pl);
 		}
 
-		pack();
+		parent.pack();
 	}
 
 	private void parse() {
-		try(
-			FileReader input = new FileReader(fichier);
-			BufferedReader bufRead = new BufferedReader(input);
-		) {
+		try (FileReader input = new FileReader(fichier); BufferedReader bufRead = new BufferedReader(input);) {
 			lLoot.clear();
-			
+
 			String line = null;
 			boolean firstLine = true;
 
 			// On lit le fichier ligne par ligne
 			while ((line = bufRead.readLine()) != null) {
-				
+
 				// Si la première ligne correspond à la description des champs
 				// on passe
 				if (firstLine) {
 					firstLine = false;
-					
+
 					if (line.startsWith("player,")) {
 						continue;
 					} else {
@@ -477,7 +448,7 @@ public class Parser extends JFrame {
 
 				// On récupère le nom du joueur (sans le serveur)
 				String nomJoueur = parts[0].split("-")[0];
-				
+
 				// On récupère la difficulté
 				String difficulte = parts[8].split("-")[1];
 
@@ -490,10 +461,11 @@ public class Parser extends JFrame {
 				Pattern pattern = Pattern.compile(".*:110:[^:]*:[^:]*:[^:]*:[^:]*:([^:]*):.*\\[(.*)\\].*");
 				Matcher matcher = pattern.matcher(parts[3]);
 				if (matcher.find()) {
-					bonus = matcher.group(1) == null || matcher.group(1).equals("") ? -1 : Integer.parseInt(matcher.group(1));
+					bonus = matcher.group(1) == null || matcher.group(1).equals("") ? -1
+							: Integer.parseInt(matcher.group(1));
 					item = matcher.group(2);
 				}
-				
+
 				// On check si on aurait pas le mode "Passer automatiquement"
 				String raison = parts[5];
 				if (raison.startsWith("Passer")) {
@@ -502,7 +474,8 @@ public class Parser extends JFrame {
 					raison = "Hors ligne";
 				}
 
-				Loot loot = new Loot(nomJoueur, date, item, Integer.parseInt(parts[4]), bonus, parts[9], difficulte, raison);
+				Loot loot = new Loot(nomJoueur, date, item, Integer.parseInt(parts[4]), bonus, parts[9], difficulte,
+						raison);
 
 				lLoot.add(loot);
 				Collections.sort(lLoot);
@@ -519,45 +492,46 @@ public class Parser extends JFrame {
 	private void genererRecap() {
 		if (lLoot != null && !lLoot.isEmpty()) {
 			JFrame jf = new JFrame("Génération Récap de raid");
-			
+
 			JTextArea text = new JTextArea();
 			text.setEditable(false);
-			DefaultCaret caret = (DefaultCaret)text.getCaret();
+			DefaultCaret caret = (DefaultCaret) text.getCaret();
 			caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
-			
+
 			JScrollPane pScroll = new JScrollPane(text);
-			pScroll.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-			
+			pScroll.setPreferredSize(new Dimension(MainGUI.WIDTH, MainGUI.HEIGHT));
+
 			jf.add(pScroll);
-			
+
 			text.append("[align=center]- RAID DU ");
-			
+
 			Date date = lLoot.get(0).getDateLoot();
 			text.append(new SimpleDateFormat("EEEE dd MMMM", Locale.FRENCH).format(date).toUpperCase());
 			text.append(" -[/align]\n\n");
-			
+
 			text.append("[u][b]- Compo et logs de la soirée :[/b][/u]\n\n");
-			text.append("[url=https://www.warcraftlogs.com/guilds/5208]https://www.warcraftlogs.com/guilds/5208[/url]\n\n\n");
-			
+			text.append(
+					"[url=https://www.warcraftlogs.com/guilds/5208]https://www.warcraftlogs.com/guilds/5208[/url]\n\n\n");
+
 			text.append("[u][b]- Boss down :[/b][/u]\n\n");
-			
+
 			String boss = "";
-			for(Loot l : lLoot) {
+			for (Loot l : lLoot) {
 				if (!boss.equals(l.getBoss())) {
 					boss = l.getBoss();
 					text.append("- " + boss + " " + l.getDifficulte() + "\n");
 				}
 			}
-			
+
 			text.append("\n\n[u][b]- Loots :[/b][/u]\n");
-			
+
 			String r = "";
 			boolean last;
 			boss = "";
-			for(Loot l : lLoot) {
+			for (Loot l : lLoot) {
 				if (l.getRaison().equals("Upgrade") || !cTri.isSelected()) {
 					last = boss.equals(l.getBoss());
-				
+
 					if (!last) {
 						text.append(r + "\n");
 						r = "- " + l.getBoss() + " " + l.getDifficulte() + " : ";
@@ -565,28 +539,30 @@ public class Parser extends JFrame {
 						r += " / ";
 					}
 					r += l.getJoueur() + " ";
-					
+
 					if (l.getItemID() != -1) {
-						r += "[url=http://fr.wowhead.com/item=" + l.getItemID() + (l.getBonus() != -1 ? "&bonus=" + l.getBonus() : "") + "][" + l.getItem() + "][/url] ";
+						r += "[url=http://fr.wowhead.com/item=" + l.getItemID()
+								+ (l.getBonus() != -1 ? "&bonus=" + l.getBonus() : "") + "][" + l.getItem()
+								+ "][/url] ";
 					} else {
 						r += "[" + l.getItem() + "] ";
 					}
-					
-					switch(l.getRaison()) {
-						case "Upgrade":
-							r += "Spé1";
-							break;
-						default:
-							r += l.getRaison();
-							break;
+
+					switch (l.getRaison()) {
+					case "Upgrade":
+						r += "Spé1";
+						break;
+					default:
+						r += l.getRaison();
+						break;
 					}
-					
+
 					boss = l.getBoss();
 				}
 			}
 			text.append(r);
-			
-			jf.setMinimumSize(new Dimension(WIDTH, HEIGHT));
+
+			jf.setMinimumSize(new Dimension(MainGUI.WIDTH, MainGUI.HEIGHT));
 			jf.pack();
 			jf.setVisible(true);
 		} else {
@@ -594,102 +570,108 @@ public class Parser extends JFrame {
 					"Erreur de parsage", JOptionPane.ERROR_MESSAGE);
 		}
 	}
-	
+
 	private void genererPoints() {
 		if (lLoot != null && !lLoot.isEmpty()) {
 			JFrame jf = new JFrame("Génération Points Ninjacup");
-			
+
 			JTextArea text = new JTextArea();
 			text.setEditable(false);
-			DefaultCaret caret = (DefaultCaret)text.getCaret();
+			DefaultCaret caret = (DefaultCaret) text.getCaret();
 			caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
-			
+
 			JScrollPane pScroll = new JScrollPane(text);
-			pScroll.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-			
+			pScroll.setPreferredSize(new Dimension(MainGUI.WIDTH, MainGUI.HEIGHT));
+
 			jf.add(pScroll);
-			
+
 			SortedMap<String, Integer> mapPoints = new TreeMap<>();
-			for(Loot l : lLoot) {
+			for (Loot l : lLoot) {
 				if (l.getRaison().equals("Upgrade")) {
 					int nbPoints = 0;
 					if (mapPoints.containsKey(l.getJoueur())) {
 						nbPoints = mapPoints.get(l.getJoueur());
 					}
-					
-					switch(l.getDifficulte()) {
-						case "Mythique":
-							nbPoints += 3;
-							break;
-						case "Héroïque":
-							nbPoints += 2;
-							break;
-						case "Normal":
-							nbPoints += 1;
-							break;
+
+					switch (l.getDifficulte()) {
+					case "Mythique":
+						nbPoints += 3;
+						break;
+					case "Héroïque":
+						nbPoints += 2;
+						break;
+					case "Normal":
+						nbPoints += 1;
+						break;
 					}
-					
+
 					mapPoints.put(l.getJoueur(), nbPoints);
 				}
 			}
-			
-			for(String joueur : mapPoints.keySet()) {
+
+			for (String joueur : mapPoints.keySet()) {
 				text.append(joueur + " :\n");
-				text.append("\tPoints : +" + mapPoints.get(joueur) + "\n");
-				text.append("\tLoots:\n");
-				
+				text.append("    Points : +" + mapPoints.get(joueur) + "\n");
+				text.append("    Loots:\n");
+
 				int nbNm = 0;
 				int nbHm = 0;
 				int nbMm = 0;
 				String nm = "";
 				String hm = "";
 				String mm = "";
-				for(Loot l : lLoot) {
+				for (Loot l : lLoot) {
 					if (joueur.equals(l.getJoueur())) {
 						if (l.getRaison().equals("Upgrade")) {
-							switch(l.getDifficulte()) {
-								case "Normal":
-									nbNm++;
-									
-									if (l.getItemID() != -1) {
-										nm += "[url=http://fr.wowhead.com/item=" + l.getItemID() + (l.getBonus() != -1 ? "&bonus=" + l.getBonus() : "") + "][" + l.getItem() + "][/url] ";
-									} else {
-										nm += "[" + l.getItem() + "] ";
-									}
-									
-									break;
-								case "Héroïque":
-									nbHm++;
-									
-									if (l.getItemID() != -1) {
-										hm += "[url=http://fr.wowhead.com/item=" + l.getItemID() + (l.getBonus() != -1 ? "&bonus=" + l.getBonus() : "") + "][" + l.getItem() + "][/url] ";
-									} else {
-										hm += "[" + l.getItem() + "] ";
-									}
-									
-									break;
-								case "Mythique":
-									nbMm++;
-									
-									if (l.getItemID() != -1) {
-										mm += "[url=http://fr.wowhead.com/item=" + l.getItemID() + (l.getBonus() != -1 ? "&bonus=" + l.getBonus() : "") + "][" + l.getItem() + "][/url] ";
-									} else {
-										mm += "[" + l.getItem() + "] ";
-									}
-									
-									break;
+							switch (l.getDifficulte()) {
+							case "Normal":
+								nbNm++;
+
+								if (l.getItemID() != -1) {
+									nm += "[url=http://fr.wowhead.com/item=" + l.getItemID()
+											+ (l.getBonus() != -1 ? "&bonus=" + l.getBonus() : "") + "][" + l.getItem()
+											+ "][/url] ";
+								} else {
+									nm += "[" + l.getItem() + "] ";
+								}
+
+								break;
+							case "Héroïque":
+								nbHm++;
+
+								if (l.getItemID() != -1) {
+									hm += "[url=http://fr.wowhead.com/item=" + l.getItemID()
+											+ (l.getBonus() != -1 ? "&bonus=" + l.getBonus() : "") + "][" + l.getItem()
+											+ "][/url] ";
+								} else {
+									hm += "[" + l.getItem() + "] ";
+								}
+
+								break;
+							case "Mythique":
+								nbMm++;
+
+								if (l.getItemID() != -1) {
+									mm += "[url=http://fr.wowhead.com/item=" + l.getItemID()
+											+ (l.getBonus() != -1 ? "&bonus=" + l.getBonus() : "") + "][" + l.getItem()
+											+ "][/url] ";
+								} else {
+									mm += "[" + l.getItem() + "] ";
+								}
+
+								break;
 							}
 						}
 					}
 				}
-				
-				text.append("\t\t" + nbNm + " NM : " + nm + "\n");
-				text.append("\t\t" + nbHm + " HM : " + hm + "\n");
-				text.append("\t\t" + nbMm + " MM : " + mm + "\n");
+
+				text.append("        " + nbNm + " NM : " + nm + "\n");
+				text.append("        " + nbHm + " HM : " + hm + "\n");
+				text.append("        " + nbMm + " MM : " + mm + "\n");
 				text.append("\n");
 			}
-			
-			jf.setMinimumSize(new Dimension(WIDTH, HEIGHT));
+
+			jf.setMinimumSize(new Dimension(MainGUI.WIDTH, MainGUI.HEIGHT));
 			jf.pack();
 			jf.setVisible(true);
 		} else {
@@ -697,14 +679,24 @@ public class Parser extends JFrame {
 					"Erreur de parsage", JOptionPane.ERROR_MESSAGE);
 		}
 	}
-	
+
 	protected JOptionPane getOptionPane(JComponent parent) {
-        JOptionPane pane = null;
-        if (!(parent instanceof JOptionPane)) {
-            pane = getOptionPane((JComponent)parent.getParent());
-        } else {
-            pane = (JOptionPane) parent;
-        }
-        return pane;
-    }
+		JOptionPane pane = null;
+		if (!(parent instanceof JOptionPane)) {
+			pane = getOptionPane((JComponent) parent.getParent());
+		} else {
+			pane = (JOptionPane) parent;
+		}
+		return pane;
+	}
+	
+	public void ouvrirFichier() {
+		final JFileChooser fc = new JFileChooser();
+		int r = fc.showOpenDialog(parent);
+
+		if (r == JFileChooser.APPROVE_OPTION) {
+			fichier = fc.getSelectedFile();
+			lNomFichier.setText(fichier.getName());
+		}
+	}
 }
