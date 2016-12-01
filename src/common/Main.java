@@ -3,6 +3,8 @@ package common;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import gui.MainGUI;
+
 public class Main {
 	public static void main(String[] args) {
 		try {
