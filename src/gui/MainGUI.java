@@ -42,6 +42,13 @@ public class MainGUI extends JFrame {
 		});
 
 		JMenuItem menuItemQuit = new JMenuItem("Quitter");
+		menuItemQuit.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.exit(1);
+			}
+		});
 
 		menuFichier.add(menuItemOpen);
 		menuFichier.addSeparator();
