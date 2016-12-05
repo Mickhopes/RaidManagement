@@ -16,28 +16,55 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 
 public class MainGUI extends JFrame {
+	public enum State {LOOT, COMPO};
 	static final int HEIGHT = 600;
 	static final int WIDTH = 800;
+	
+	private State state;
 
 	public MainGUI(String title) {
 		super(title);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		LootPanel lootPanel = new LootPanel(this);
+		state = State.LOOT;
 
 		// MenuBar
 		JMenuBar menuBar = new JMenuBar();
 
 		// JMenu Fichier
 		JMenu menuFichier = new JMenu("Fichier");
-
-		JMenuItem menuItemOpen = new JMenuItem("Ouvrir");
-		menuItemOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
-		menuItemOpen.addActionListener(new ActionListener() {
+		
+		JMenuItem menuItemSave = new JMenuItem("Sauvegarder");
+		menuItemSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
+		menuItemSave.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				lootPanel.ouvrirFichier();
+				switch(state) {
+					case LOOT:
+						break;
+					case COMPO:
+						break;
+					default:
+						break;
+				}
+			}
+		});
+		
+		JMenuItem menuItemLoad = new JMenuItem("Charger");
+		menuItemLoad.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				switch(state) {
+					case LOOT:
+						break;
+					case COMPO:
+						break;
+					default:
+						break;
+				}
 			}
 		});
 
@@ -50,7 +77,8 @@ public class MainGUI extends JFrame {
 			}
 		});
 
-		menuFichier.add(menuItemOpen);
+		menuFichier.add(menuItemLoad);
+		menuFichier.add(menuItemSave);
 		menuFichier.addSeparator();
 		menuFichier.add(menuItemQuit);
 		menuBar.add(menuFichier);

@@ -699,4 +699,12 @@ public class LootPanel extends JPanel {
 			lNomFichier.setText(fichier.getName());
 		}
 	}
+
+	public ArrayList<Loot> getlLoot() {
+		return lLoot;
+	}
+
+	public void setlLoot(ArrayList<Loot> lLoot) {
+		this.lLoot = lLoot;
+	}
 }
