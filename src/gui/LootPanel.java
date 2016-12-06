@@ -706,5 +706,6 @@ public class LootPanel extends JPanel {
 
 	public void setlLoot(ArrayList<Loot> lLoot) {
 		this.lLoot = lLoot;
+		this.refreshListe();
 	}
 }
