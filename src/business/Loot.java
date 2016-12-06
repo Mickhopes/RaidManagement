@@ -1,8 +1,9 @@
 package business;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Loot implements Comparable<Loot> {
+public class Loot implements Comparable<Loot>, Serializable {
 	private String joueur;
 	private Date dateLoot;
 	private String item;
