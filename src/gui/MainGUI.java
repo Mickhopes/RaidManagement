@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -169,6 +170,19 @@ public class MainGUI extends JFrame {
 				}
 			}
 		});
+		
+		JMenuItem menuOptions = new JMenuItem("Options...");
+		menuOptions.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						new SettingsGUI("Options", MainGUI.this).setVisible(true);
+					}
+				});
+			}
+		});
 
 		JMenuItem menuItemQuit = new JMenuItem("Quitter");
 		menuItemQuit.addActionListener(new ActionListener() {
@@ -182,6 +196,8 @@ public class MainGUI extends JFrame {
 		menuFichier.add(menuItemLoad);
 		menuFichier.add(menuItemSave);
 		menuFichier.add(menuItemSaveUnder);
+		menuFichier.addSeparator();
+		menuFichier.add(menuOptions);
 		menuFichier.addSeparator();
 		menuFichier.add(menuItemQuit);
 		menuBar.add(menuFichier);
@@ -225,6 +241,7 @@ public class MainGUI extends JFrame {
 		add(onglets);
 
 		setMinimumSize(new Dimension(WIDTH, HEIGHT));
+		setLocationRelativeTo(null);
 		pack();
 	}
 }
