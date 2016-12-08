@@ -447,19 +447,19 @@ public class LootPanel extends JPanel {
 				String[] parts = line.split(",");
 
 				// On récupère le nom du joueur (sans le serveur)
-				String nomJoueur = parts[0].split("-")[0];
+				String nomJoueur = parts[1].split("-")[0];
 
 				// On récupère la difficulté
-				String difficulte = parts[8].split("-")[1];
+				String difficulte = parts[9].split("-")[1];
 
 				// On récupère la date
-				Date date = new SimpleDateFormat("dd/MM/yy hh:mm:ss", Locale.FRENCH).parse(parts[1] + " " + parts[2]);
+				Date date = new SimpleDateFormat("dd/MM/yy hh:mm:ss", Locale.FRENCH).parse(parts[2] + " " + parts[3]);
 
 				// On récupère le nom d'item et son bonus
 				String item = "";
 				int bonus = -1;
 				Pattern pattern = Pattern.compile(".*:110:[^:]*:[^:]*:[^:]*:[^:]*:([^:]*):.*\\[(.*)\\].*");
-				Matcher matcher = pattern.matcher(parts[3]);
+				Matcher matcher = pattern.matcher(parts[4]);
 				if (matcher.find()) {
 					bonus = matcher.group(1) == null || matcher.group(1).equals("") ? -1
 							: Integer.parseInt(matcher.group(1));
@@ -467,14 +467,14 @@ public class LootPanel extends JPanel {
 				}
 
 				// On check si on aurait pas le mode "Passer automatiquement"
-				String raison = parts[5];
+				String raison = parts[6];
 				if (raison.startsWith("Passer")) {
 					raison = "Passer";
 				} else if (raison.startsWith("Hors ligne")) {
 					raison = "Hors ligne";
 				}
 
-				Loot loot = new Loot(nomJoueur, date, item, Integer.parseInt(parts[4]), bonus, parts[9], difficulte,
+				Loot loot = new Loot(nomJoueur, date, item, Integer.parseInt(parts[5]), bonus, parts[10], difficulte,
 						raison);
 
 				lLoot.add(loot);
