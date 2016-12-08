@@ -185,7 +185,7 @@ public class LootPanel extends JPanel {
 		// Création du label de nom de joueur
 		JPanel pNomJoueur = new JPanel(new BorderLayout());
 		JLabel lNomJoueur = new JLabel("Pseudo * :");
-		JTextField tNomJoueur = new JTextField("", 10);
+		JTextField tNomJoueur = new JTextField("", 15);
 		pNomJoueur.add(lNomJoueur, BorderLayout.WEST);
 		pNomJoueur.add(tNomJoueur, BorderLayout.EAST);
 		pNomJoueur.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
@@ -193,7 +193,7 @@ public class LootPanel extends JPanel {
 		// Création du label de nom de boss
 		JPanel pNomBoss = new JPanel(new BorderLayout());
 		JLabel lNomBoss = new JLabel("Boss * :");
-		JTextField tNomBoss = new JTextField("", 10);
+		JTextField tNomBoss = new JTextField("", 15);
 		pNomBoss.add(lNomBoss, BorderLayout.WEST);
 		pNomBoss.add(tNomBoss, BorderLayout.EAST);
 		pNomBoss.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
@@ -201,23 +201,23 @@ public class LootPanel extends JPanel {
 		// Création du label de nom d'item
 		JPanel pNomItem = new JPanel(new BorderLayout());
 		JLabel lNomItem = new JLabel("Item * :");
-		JTextField tNomItem = new JTextField("", 10);
+		JTextField tNomItem = new JTextField("", 15);
 		pNomItem.add(lNomItem, BorderLayout.WEST);
 		pNomItem.add(tNomItem, BorderLayout.EAST);
 		pNomItem.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
-		// Création du label de nom de joueur
+		// Création du label d'id d'item
 		JPanel pItemId = new JPanel(new BorderLayout());
 		JLabel lItemId = new JLabel("ID de l'item :");
-		JTextField tItemId = new JTextField("", 10);
+		JTextField tItemId = new JTextField("", 15);
 		pItemId.add(lItemId, BorderLayout.WEST);
 		pItemId.add(tItemId, BorderLayout.EAST);
 		pItemId.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
-		// Création du label de nom de joueur
+		// Création du label du bonus de l'item
 		JPanel pItemBonus = new JPanel(new BorderLayout());
 		JLabel lItemBonus = new JLabel("Bonus de l'item :");
-		JTextField tItemBonus = new JTextField("", 10);
+		JTextField tItemBonus = new JTextField("", 15);
 		pItemBonus.add(lItemBonus, BorderLayout.WEST);
 		pItemBonus.add(tItemBonus, BorderLayout.EAST);
 		pItemBonus.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
@@ -354,7 +354,7 @@ public class LootPanel extends JPanel {
 			JPanel left = new JPanel();
 			JPanel right = new JPanel();
 
-			JTextField tNom = new JTextField(l.getJoueur(), 10);
+			JTextField tNom = new JTextField(l.getJoueur(), 15);
 			tNom.addKeyListener(new KeyListener() {
 
 				@Override
@@ -427,58 +427,31 @@ public class LootPanel extends JPanel {
 			lLoot.clear();
 
 			String line = null;
-			boolean firstLine = true;
 
 			// On lit le fichier ligne par ligne
 			while ((line = bufRead.readLine()) != null) {
-
-				// Si la première ligne correspond à la description des champs
-				// on passe
-				if (firstLine) {
-					firstLine = false;
-
-					if (line.startsWith("player,")) {
-						continue;
-					} else {
-						throw new Exception("Mauvais format de fichier");
-					}
-				}
-
-				String[] parts = line.split(",");
-
-				// On récupère le nom du joueur (sans le serveur)
-				String nomJoueur = parts[1].split("-")[0];
-
-				// On récupère la difficulté
-				String difficulte = parts[9].split("-")[1];
-
-				// On récupère la date
-				Date date = new SimpleDateFormat("dd/MM/yy hh:mm:ss", Locale.FRENCH).parse(parts[2] + " " + parts[3]);
-
-				// On récupère le nom d'item et son bonus
-				String item = "";
-				int bonus = -1;
-				Pattern pattern = Pattern.compile(".*:110:[^:]*:[^:]*:[^:]*:[^:]*:([^:]*):.*\\[(.*)\\].*");
-				Matcher matcher = pattern.matcher(parts[4]);
+				Pattern pattern = Pattern.compile(",([^,]*).*?,(.*?),(.*?),.*?:110:.*?:(.*?):.*?\\[(.*)\\].*?,(.*?),(.*?),.*?\\-(.*?),(.*?),.*");
+				Matcher matcher = pattern.matcher(line);
 				if (matcher.find()) {
-					bonus = matcher.group(1) == null || matcher.group(1).equals("") ? -1
-							: Integer.parseInt(matcher.group(1));
-					item = matcher.group(2);
+					// On récupère la date
+					Date date = new SimpleDateFormat("dd/MM/yy hh:mm:ss", Locale.FRENCH).parse(matcher.group(2) + " " + matcher.group(3));
+
+					// On récupère l'éventuel bonus de l'item
+					int bonus = matcher.group(4) == null || matcher.group(4).equals("") ? -1 : Integer.parseInt(matcher.group(4));
+
+					// On check si on aurait pas le mode "Passer automatiquement"
+					String raison = matcher.group(7);
+					if (raison.startsWith("Passer")) {
+						raison = "Passer";
+					} else if (raison.startsWith("Hors ligne")) {
+						raison = "Hors ligne";
+					}
+
+					Loot loot = new Loot(matcher.group(1), date, matcher.group(5), Integer.parseInt(matcher.group(6)), bonus, matcher.group(9), matcher.group(8), raison);
+
+					lLoot.add(loot);
+					Collections.sort(lLoot);
 				}
-
-				// On check si on aurait pas le mode "Passer automatiquement"
-				String raison = parts[6];
-				if (raison.startsWith("Passer")) {
-					raison = "Passer";
-				} else if (raison.startsWith("Hors ligne")) {
-					raison = "Hors ligne";
-				}
-
-				Loot loot = new Loot(nomJoueur, date, item, Integer.parseInt(parts[5]), bonus, parts[10], difficulte,
-						raison);
-
-				lLoot.add(loot);
-				Collections.sort(lLoot);
 			}
 
 			refreshListe();
