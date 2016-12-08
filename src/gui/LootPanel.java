@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
@@ -430,7 +431,10 @@ public class LootPanel extends JPanel {
 
 			// On lit le fichier ligne par ligne
 			while ((line = bufRead.readLine()) != null) {
-				Pattern pattern = Pattern.compile(",([^,]*).*?,(.*?),(.*?),.*?:110:.*?:(.*?):.*?\\[(.*)\\].*?,(.*?),(.*?),.*?\\-(.*?),(.*?),.*");
+				// On récupère l'expression régulière des loots
+				ResourceBundle bundle = ResourceBundle.getBundle("config");
+				
+				Pattern pattern = Pattern.compile(bundle.getString("loot.regex"));
 				Matcher matcher = pattern.matcher(line);
 				if (matcher.find()) {
 					// On récupère la date
