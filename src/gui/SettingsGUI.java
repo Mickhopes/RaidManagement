@@ -23,7 +23,6 @@ public class SettingsGUI extends JFrame {
 	
 	public SettingsGUI(String title, JFrame parent) {
 		super(title);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		JPanel global = new JPanel(new BorderLayout());
 		
@@ -48,7 +47,7 @@ public class SettingsGUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 //				Properties props = new Properties();
 //				
-//				// On récupère les propriétées
+//				// On rÃ©cupÃ¨re les propriÃ©tÃ©es
 //				try(
 //					FileInputStream fins = new FileInputStream("resources/config.properties");
 //				) {
@@ -56,7 +55,7 @@ public class SettingsGUI extends JFrame {
 //				} catch (IOException ex) {
 //					ex.printStackTrace();
 //					JOptionPane.showMessageDialog(SettingsGUI.this,
-//							"Erreur lors de l'application des paramètres :\n" + ex.getMessage(),
+//							"Erreur lors de l'application des paramÃ¨tres :\n" + ex.getMessage(),
 //							"Erreur", JOptionPane.ERROR_MESSAGE);
 //				}
 //				
@@ -69,7 +68,7 @@ public class SettingsGUI extends JFrame {
 //				} catch (IOException ex) {
 //					ex.printStackTrace();
 //					JOptionPane.showMessageDialog(SettingsGUI.this,
-//							"Erreur lors de l'application des paramètres :\n" + ex.getMessage(),
+//							"Erreur lors de l'application des paramÃ¨tres :\n" + ex.getMessage(),
 //							"Erreur", JOptionPane.ERROR_MESSAGE);
 //				}
 //				
@@ -82,7 +81,7 @@ public class SettingsGUI extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SettingsGUI.this.dispose();
+				SettingsGUI.this.setVisible(false);
 			}
 		});
 		
@@ -92,7 +91,7 @@ public class SettingsGUI extends JFrame {
 		global.add(lootOptions, BorderLayout.CENTER);
 		global.add(buttons, BorderLayout.SOUTH);
 		
-		// Mise du bouton par défault
+		// Mise du bouton par dÃ©fault
 		getRootPane().setDefaultButton(bSave);
 		bSave.requestFocus();
 		

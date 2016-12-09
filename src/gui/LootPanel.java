@@ -41,7 +41,7 @@ import javax.swing.text.DefaultCaret;
 import business.Loot;
 
 public class LootPanel extends JPanel {
-	static final String[] upgrades = { "Upgrade", "Mini-upgrade", "SpÈ2", "Transmo", "Passer", "Hors ligne" };
+	static final String[] upgrades = { "Upgrade", "Mini-upgrade", "Sp√©2", "Transmo", "Passer", "Hors ligne" };
 
 	private JFrame parent;
 
@@ -61,15 +61,15 @@ public class LootPanel extends JPanel {
 
 		this.setLayout(new BorderLayout());
 
-		// CrÈation du panel de sÈlection de fichier ‡ parser
+		// Cr√©ation du panel de s√©lection de fichier √† parser
 		JPanel pSelection = new JPanel();
 		pSelection.setLayout(new BoxLayout(pSelection, BoxLayout.X_AXIS));
 
-		// CrÈation du label d'indication du nom de fichier
+		// Cr√©ation du label d'indication du nom de fichier
 		lNomFichier = new JTextField();
 		lNomFichier.setEnabled(false);
 
-		// CrÈation du bouton de sÈlection de fichier ‡ parser
+		// Cr√©ation du bouton de s√©lection de fichier √† parser
 		JButton bSelection = new JButton("Ouvrir...");
 		bSelection.addActionListener(new ActionListener() {
 
@@ -80,7 +80,7 @@ public class LootPanel extends JPanel {
 
 		});
 
-		// CrÈation du bouton pour parser le fichier
+		// Cr√©ation du bouton pour parser le fichier
 		JButton bParse = new JButton("Parser");
 		bParse.addActionListener(new ActionListener() {
 
@@ -89,14 +89,14 @@ public class LootPanel extends JPanel {
 				if (fichier != null) {
 					parse();
 				} else {
-					JOptionPane.showMessageDialog(parent, "Vous devez sÈlectionner un fichier ‡ parser", "Erreur",
+					JOptionPane.showMessageDialog(parent, "Vous devez s√©lectionner un fichier √† parser", "Erreur",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
 
 		});
 
-		// Ajout des composants dans le panel de sÈlection de fichier
+		// Ajout des composants dans le panel de s√©lection de fichier
 		pSelection.add(lNomFichier);
 		pSelection.add(Box.createRigidArea(new Dimension(10, 0)));
 		pSelection.add(bSelection);
@@ -107,18 +107,18 @@ public class LootPanel extends JPanel {
 
 		this.add(pSelection, BorderLayout.NORTH);
 
-		// CrÈation du panel d'affichage des loots
+		// Cr√©ation du panel d'affichage des loots
 		pLoot = new JPanel();
 		pLoot.setLayout(new BoxLayout(pLoot, BoxLayout.Y_AXIS));
 
-		// CrÈation du panel pour scroller
+		// Cr√©ation du panel pour scroller
 		JScrollPane pScroll = new JScrollPane(pLoot);
 		pScroll.setPreferredSize(new Dimension(pScroll.getWidth(), 400));
 		pScroll.getVerticalScrollBar().setUnitIncrement(16);
 
 		this.add(pScroll, BorderLayout.CENTER);
 
-		// CrÈation du panel d'ajout de loot et de gÈnÈration des rÈsultats
+		// Cr√©ation du panel d'ajout de loot et de g√©n√©ration des r√©sultats
 		JPanel pBas = new JPanel(new BorderLayout());
 
 		JPanel pAjout = new JPanel();
@@ -137,14 +137,14 @@ public class LootPanel extends JPanel {
 
 		pBas.add(pAjout, BorderLayout.WEST);
 
-		// CrÈation du panel contenant les boutons de rÈsultat
+		// Cr√©ation du panel contenant les boutons de r√©sultat
 		JPanel pGenerer = new JPanel();
 
 		cTri = new JCheckBox("Upgrade uniquement");
 		cTri.setSelected(true);
 
-		// CrÈation du jbutton de gÈnÈration du rÈcap
-		JButton bRecap = new JButton("RÈcap");
+		// Cr√©ation du jbutton de g√©n√©ration du r√©cap
+		JButton bRecap = new JButton("R√©cap");
 		bRecap.addActionListener(new ActionListener() {
 
 			@Override
@@ -154,7 +154,7 @@ public class LootPanel extends JPanel {
 
 		});
 
-		// CrÈation du jbutton de gÈnÈration des points ninjacup
+		// Cr√©ation du jbutton de g√©n√©ration des points ninjacup
 		JButton bPoints = new JButton("Points");
 		bPoints.addActionListener(new ActionListener() {
 
@@ -179,11 +179,11 @@ public class LootPanel extends JPanel {
 	}
 
 	private void afficherFenetreAjout() {
-		// CrÈation du panel de d'ajout
+		// Cr√©ation du panel de d'ajout
 		JPanel pAjout = new JPanel();
 		pAjout.setLayout(new BoxLayout(pAjout, BoxLayout.Y_AXIS));
 
-		// CrÈation du label de nom de joueur
+		// Cr√©ation du label de nom de joueur
 		JPanel pNomJoueur = new JPanel(new BorderLayout());
 		JLabel lNomJoueur = new JLabel("Pseudo * :");
 		JTextField tNomJoueur = new JTextField("", 15);
@@ -191,7 +191,7 @@ public class LootPanel extends JPanel {
 		pNomJoueur.add(tNomJoueur, BorderLayout.EAST);
 		pNomJoueur.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
-		// CrÈation du label de nom de boss
+		// Cr√©ation du label de nom de boss
 		JPanel pNomBoss = new JPanel(new BorderLayout());
 		JLabel lNomBoss = new JLabel("Boss * :");
 		JTextField tNomBoss = new JTextField("", 15);
@@ -199,7 +199,7 @@ public class LootPanel extends JPanel {
 		pNomBoss.add(tNomBoss, BorderLayout.EAST);
 		pNomBoss.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
-		// CrÈation du label de nom d'item
+		// Cr√©ation du label de nom d'item
 		JPanel pNomItem = new JPanel(new BorderLayout());
 		JLabel lNomItem = new JLabel("Item * :");
 		JTextField tNomItem = new JTextField("", 15);
@@ -207,7 +207,7 @@ public class LootPanel extends JPanel {
 		pNomItem.add(tNomItem, BorderLayout.EAST);
 		pNomItem.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
-		// CrÈation du label d'id d'item
+		// Cr√©ation du label d'id d'item
 		JPanel pItemId = new JPanel(new BorderLayout());
 		JLabel lItemId = new JLabel("ID de l'item :");
 		JTextField tItemId = new JTextField("", 15);
@@ -215,7 +215,7 @@ public class LootPanel extends JPanel {
 		pItemId.add(tItemId, BorderLayout.EAST);
 		pItemId.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
-		// CrÈation du label du bonus de l'item
+		// Cr√©ation du label du bonus de l'item
 		JPanel pItemBonus = new JPanel(new BorderLayout());
 		JLabel lItemBonus = new JLabel("Bonus de l'item :");
 		JTextField tItemBonus = new JTextField("", 15);
@@ -223,7 +223,7 @@ public class LootPanel extends JPanel {
 		pItemBonus.add(tItemBonus, BorderLayout.EAST);
 		pItemBonus.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
-		// CrÈation de la combobox pour le type d'upgrade
+		// Cr√©ation de la combobox pour le type d'upgrade
 		JPanel pUp = new JPanel(new BorderLayout());
 		JLabel lUp = new JLabel("Raison * :");
 		JComboBox<String> cbUp = new JComboBox<>(upgrades);
@@ -231,17 +231,17 @@ public class LootPanel extends JPanel {
 		pUp.add(cbUp, BorderLayout.EAST);
 		pUp.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
-		// CrÈation de la combobox pour la difficulte
+		// Cr√©ation de la combobox pour la difficulte
 		JPanel pDiff = new JPanel(new BorderLayout());
-		JLabel lDiff = new JLabel("DifficultÈ * :");
-		String[] diff = { "Normal", "HÈroÔque", "Mythique" };
+		JLabel lDiff = new JLabel("Difficult√© * :");
+		String[] diff = { "Normal", "H√©ro√Øque", "Mythique" };
 		JComboBox<String> cbDiff = new JComboBox<>(diff);
 		cbDiff.setPreferredSize(cbUp.getPreferredSize());
 		pDiff.add(lDiff, BorderLayout.WEST);
 		pDiff.add(cbDiff, BorderLayout.EAST);
 		pDiff.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
-		// CrÈation du bouton ajouter
+		// Cr√©ation du bouton ajouter
 		JButton bAjout = new JButton("Ajouter");
 		bAjout.setEnabled(false);
 		bAjout.addActionListener(new ActionListener() {
@@ -254,7 +254,7 @@ public class LootPanel extends JPanel {
 
 		});
 
-		// CrÈation du bouton annuler
+		// Cr√©ation du bouton annuler
 		JButton bAnnuler = new JButton("Annuler");
 		bAnnuler.addActionListener(new ActionListener() {
 
@@ -266,7 +266,7 @@ public class LootPanel extends JPanel {
 
 		});
 
-		// CrÈation du KeyListener pour les labels
+		// Cr√©ation du KeyListener pour les labels
 		KeyListener kl = new KeyListener() {
 
 			@Override
@@ -343,7 +343,7 @@ public class LootPanel extends JPanel {
 	}
 
 	private void refreshListe() {
-		// On enlËve tout ce qu'on avait dÈj‡
+		// On enl√®ve tout ce qu'on avait d√©j√†
 		pLoot.removeAll();
 		pLoot.revalidate();
 		pLoot.repaint();
@@ -431,16 +431,16 @@ public class LootPanel extends JPanel {
 
 			// On lit le fichier ligne par ligne
 			while ((line = bufRead.readLine()) != null) {
-				// On rÈcupËre l'expression rÈguliËre des loots
+				// On r√©cup√©re l'expression r√©guli√®re des loots
 				ResourceBundle bundle = ResourceBundle.getBundle("config");
 				
 				Pattern pattern = Pattern.compile(bundle.getString("loot.regex"));
 				Matcher matcher = pattern.matcher(line);
 				if (matcher.find()) {
-					// On rÈcupËre la date
+					// On r√©cup√©re la date
 					Date date = new SimpleDateFormat("dd/MM/yy hh:mm:ss", Locale.FRENCH).parse(matcher.group(2) + " " + matcher.group(3));
 
-					// On rÈcupËre l'Èventuel bonus de l'item
+					// On r√©cup√©re l'√©ventuel bonus de l'item
 					int bonus = matcher.group(4) == null || matcher.group(4).equals("") ? -1 : Integer.parseInt(matcher.group(4));
 
 					// On check si on aurait pas le mode "Passer automatiquement"
@@ -468,7 +468,7 @@ public class LootPanel extends JPanel {
 
 	private void genererRecap() {
 		if (lLoot != null && !lLoot.isEmpty()) {
-			JFrame jf = new JFrame("GÈnÈration RÈcap de raid");
+			JFrame jf = new JFrame("G√©n√©ration R√©cap de raid");
 
 			JTextArea text = new JTextArea();
 			text.setEditable(false);
@@ -486,7 +486,7 @@ public class LootPanel extends JPanel {
 			text.append(new SimpleDateFormat("EEEE dd MMMM", Locale.FRENCH).format(date).toUpperCase());
 			text.append(" -[/align]\n\n");
 
-			text.append("[u][b]- Compo et logs de la soirÈe :[/b][/u]\n\n");
+			text.append("[u][b]- Compo et logs de la soir√©e :[/b][/u]\n\n");
 			text.append(
 					"[url=https://www.warcraftlogs.com/guilds/5208]https://www.warcraftlogs.com/guilds/5208[/url]\n\n\n");
 
@@ -527,7 +527,7 @@ public class LootPanel extends JPanel {
 
 					switch (l.getRaison()) {
 					case "Upgrade":
-						r += "SpÈ1";
+						r += "Sp√©1";
 						break;
 					default:
 						r += l.getRaison();
@@ -543,14 +543,14 @@ public class LootPanel extends JPanel {
 			jf.pack();
 			jf.setVisible(true);
 		} else {
-			JOptionPane.showMessageDialog(this, "Erreur lors de la gÈnÈration :\nAucun loot dÈtectÈ",
+			JOptionPane.showMessageDialog(this, "Erreur lors de la g√©n√©ration :\nAucun loot d√©tect√©",
 					"Erreur de parsage", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
 	private void genererPoints() {
 		if (lLoot != null && !lLoot.isEmpty()) {
-			JFrame jf = new JFrame("GÈnÈration Points Ninjacup");
+			JFrame jf = new JFrame("G√©n√©ration Points Ninjacup");
 
 			JTextArea text = new JTextArea();
 			text.setEditable(false);
@@ -574,7 +574,7 @@ public class LootPanel extends JPanel {
 					case "Mythique":
 						nbPoints += 3;
 						break;
-					case "HÈroÔque":
+					case "H√©ro√Øque":
 						nbPoints += 2;
 						break;
 					case "Normal":
@@ -613,7 +613,7 @@ public class LootPanel extends JPanel {
 								}
 
 								break;
-							case "HÈroÔque":
+							case "H√©ro√Øque":
 								nbHm++;
 
 								if (l.getItemID() != -1) {
@@ -652,7 +652,7 @@ public class LootPanel extends JPanel {
 			jf.pack();
 			jf.setVisible(true);
 		} else {
-			JOptionPane.showMessageDialog(this, "Erreur lors de la gÈnÈration :\nAucun loot dÈtectÈ",
+			JOptionPane.showMessageDialog(this, "Erreur lors de la g√©n√©ration :\nAucun loot d√©tect√©",
 					"Erreur de parsage", JOptionPane.ERROR_MESSAGE);
 		}
 	}
