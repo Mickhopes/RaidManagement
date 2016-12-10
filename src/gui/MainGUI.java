@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -64,7 +65,7 @@ public class MainGUI extends JFrame {
 					case LOOT:
 						if (lootPanel.getlLoot().isEmpty() || saveFile == null) {
 							JOptionPane.showMessageDialog(MainGUI.this,
-									"Aucun loot ‡ sauvegarder !",
+									"Aucun loot √† sauvegarder !",
 									"Attention", JOptionPane.WARNING_MESSAGE);
 							return;
 						}
@@ -98,7 +99,7 @@ public class MainGUI extends JFrame {
 					case LOOT:
 						if (lootPanel.getlLoot().isEmpty()) {
 							JOptionPane.showMessageDialog(MainGUI.this,
-									"Aucun loot ‡ sauvegarder !",
+									"Aucun loot √† sauvegarder !",
 									"Attention", JOptionPane.WARNING_MESSAGE);
 							return;
 						}
@@ -169,6 +170,19 @@ public class MainGUI extends JFrame {
 				}
 			}
 		});
+		
+		JMenuItem menuOptions = new JMenuItem("Options...");
+		menuOptions.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						new SettingsGUI("Options", MainGUI.this).setVisible(true);
+					}
+				});
+			}
+		});
 
 		JMenuItem menuItemQuit = new JMenuItem("Quitter");
 		menuItemQuit.addActionListener(new ActionListener() {
@@ -183,20 +197,22 @@ public class MainGUI extends JFrame {
 		menuFichier.add(menuItemSave);
 		menuFichier.add(menuItemSaveUnder);
 		menuFichier.addSeparator();
+		menuFichier.add(menuOptions);
+		menuFichier.addSeparator();
 		menuFichier.add(menuItemQuit);
 		menuBar.add(menuFichier);
 
 		// JMenu Aide
 		JMenu menuAide = new JMenu("Aide");
 
-		JMenuItem menuItemAPropos = new JMenuItem("¿ propos...");
+		JMenuItem menuItemAPropos = new JMenuItem("√Ä propos...");
 		menuItemAPropos.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(MainGUI.this,
-						"Application rÈalisÈe par Adragon‡-Uldaman.\n\nTÈlÈchargement: https://github.com/Mickhopes/RaidManagement/releases\nSource code: https://github.com/Mickhopes/RaidManagement",
-						"¿ propos", JOptionPane.INFORMATION_MESSAGE);
+						"Application r√©alis√©e par Adragon√†-Uldaman.\n\nT√©l√©chargement: https://github.com/Mickhopes/RaidManagement/releases\nSource code: https://github.com/Mickhopes/RaidManagement",
+						"√Ä propos", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 
@@ -205,7 +221,7 @@ public class MainGUI extends JFrame {
 
 		setJMenuBar(menuBar);
 
-		// CrÈation des onglets
+		// Cr√©ation des onglets
 		JTabbedPane onglets = new JTabbedPane(SwingConstants.TOP);
 
 		onglets.add("Loot", lootPanel);
@@ -225,6 +241,7 @@ public class MainGUI extends JFrame {
 		add(onglets);
 
 		setMinimumSize(new Dimension(WIDTH, HEIGHT));
+		setLocationRelativeTo(null);
 		pack();
 	}
 }
