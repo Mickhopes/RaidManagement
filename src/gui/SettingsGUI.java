@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.FileSystemNotFoundException;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
@@ -31,8 +32,23 @@ public class SettingsGUI extends JFrame {
 		
 		JLabel lLootRegex = new JLabel("Loot pattern :");
 		
-		ResourceBundle bundle = ResourceBundle.getBundle("config");
-		JTextField jLootRegex = new JTextField(bundle.getString("loot.regex"), 20);
+		// On récupère le fichier de propriété
+		String regex;
+		try(
+			FileInputStream fins = new FileInputStream("raid-management.properties");
+		) {
+			Properties props = new Properties();
+			props.load(fins);
+			
+			// On récupére l'expression régulière des loots
+			regex = props.getProperty("loot.regex");
+		} catch (IOException ex) {
+			// Si le fichier n'existe pas alors on récupère l'info dans notre fichier
+			ResourceBundle bundle = ResourceBundle.getBundle("config");
+			regex = bundle.getString("loot.regex");
+		}
+
+		JTextField jLootRegex = new JTextField(regex, 20);
 		
 		lootOptions.add(lLootRegex);
 		lootOptions.add(jLootRegex);
@@ -45,38 +61,40 @@ public class SettingsGUI extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-//				Properties props = new Properties();
-//				
-//				// On récupère les propriétées
-//				try(
-//					FileInputStream fins = new FileInputStream("resources/config.properties");
-//				) {
-//					props.load(fins);
-//				} catch (IOException ex) {
-//					ex.printStackTrace();
-//					JOptionPane.showMessageDialog(SettingsGUI.this,
-//							"Erreur lors de l'application des paramètres :\n" + ex.getMessage(),
-//							"Erreur", JOptionPane.ERROR_MESSAGE);
-//				}
-//				
-//				// Puis on les sauvegarde
-//				try(
-//						FileOutputStream out = new FileOutputStream("resources/config.properties");
-//				) {
-//					props.setProperty("loot.regex", jLootRegex.getText());
-//					props.store(out, null);
-//				} catch (IOException ex) {
-//					ex.printStackTrace();
-//					JOptionPane.showMessageDialog(SettingsGUI.this,
-//							"Erreur lors de l'application des paramètres :\n" + ex.getMessage(),
-//							"Erreur", JOptionPane.ERROR_MESSAGE);
-//				}
-//				
-//				SettingsGUI.this.dispose();
+				Properties props = new Properties();
+				
+				// On récupère les propriétées
+				try(
+					FileInputStream fins = new FileInputStream("raid-management.properties");
+				) {
+					props.load(fins);
+				} catch (FileNotFoundException ex) {
+					System.out.println("fichier de config non existant. création...");
+				} catch (IOException ex) {
+					ex.printStackTrace();
+					JOptionPane.showMessageDialog(SettingsGUI.this,
+							"Erreur lors de l'application des paramètres :\n" + ex.getMessage(),
+							"Erreur", JOptionPane.ERROR_MESSAGE);
+				}
+				
+				// Puis on les sauvegarde
+				try(
+						FileOutputStream out = new FileOutputStream("raid-management.properties");
+				) {
+					props.setProperty("loot.regex", jLootRegex.getText());
+					props.store(out, null);
+				} catch (IOException ex) {
+					ex.printStackTrace();
+					JOptionPane.showMessageDialog(SettingsGUI.this,
+							"Erreur lors de l'application des paramètres :\n" + ex.getMessage(),
+							"Erreur", JOptionPane.ERROR_MESSAGE);
+				}
+				
+				SettingsGUI.this.setVisible(false);
 			}
 		});
 		
-		JButton bCancel = new JButton("Cancel");
+		JButton bCancel = new JButton("Annuler");
 		bCancel.addActionListener(new ActionListener() {
 			
 			@Override

@@ -9,12 +9,18 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -424,17 +430,35 @@ public class LootPanel extends JPanel {
 	}
 
 	private void parse() {
-		try (FileReader input = new FileReader(fichier); BufferedReader bufRead = new BufferedReader(input);) {
+		try (
+			FileInputStream fin = new FileInputStream(fichier);
+			InputStreamReader inr = new InputStreamReader(fin, StandardCharsets.ISO_8859_1);
+			BufferedReader bufRead = new BufferedReader(inr);
+		) {
 			lLoot.clear();
 
 			String line = null;
+			String regex;
+			
+			// On récupère le fichier de propriété
+			try(
+				FileInputStream fins = new FileInputStream("raid-management.properties");
+			) {
+				Properties props = new Properties();
+				props.load(fins);
+				
+				// On récupére l'expression régulière des loots
+				regex = props.getProperty("loot.regex");
+			} catch (FileNotFoundException ex) {
+				// Si le fichier n'existe pas alors on récupère l'info dans notre fichier
+				ResourceBundle bundle = ResourceBundle.getBundle("config");
+				regex = bundle.getString("loot.regex");
+			}
+			
+			Pattern pattern = Pattern.compile(regex);
 
 			// On lit le fichier ligne par ligne
 			while ((line = bufRead.readLine()) != null) {
-				// On récupére l'expression régulière des loots
-				ResourceBundle bundle = ResourceBundle.getBundle("config");
-				
-				Pattern pattern = Pattern.compile(bundle.getString("loot.regex"));
 				Matcher matcher = pattern.matcher(line);
 				if (matcher.find()) {
 					// On récupére la date
