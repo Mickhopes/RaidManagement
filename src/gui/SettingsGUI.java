@@ -114,7 +114,7 @@ public class SettingsGUI extends JFrame {
 		bSave.requestFocus();
 		
 		add(global);
-		setLocationRelativeTo(parent);
 		pack();
+		setLocationRelativeTo(parent);
 	}
 }
