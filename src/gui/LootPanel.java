@@ -11,8 +11,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -361,7 +359,7 @@ public class LootPanel extends JPanel {
 			JPanel left = new JPanel();
 			JPanel right = new JPanel();
 
-			JTextField tNom = new JTextField(l.getJoueur(), 15);
+			JTextField tNom = new JTextField(l.getJoueur(), 10);
 			tNom.addKeyListener(new KeyListener() {
 
 				@Override
