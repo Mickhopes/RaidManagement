@@ -45,7 +45,7 @@ import javax.swing.text.DefaultCaret;
 import business.Loot;
 
 public class LootPanel extends JPanel {
-	static final String[] upgrades = { "Upgrade", "Mini-upgrade", "Spé2", "Transmo", "Passer", "Hors ligne" };
+	static final String[] upgrades = { "Upgrade", "2 Part", "4 Part", "Mini-upgrade", "Spé2", "Transmo", "Passer", "Hors ligne" };
 
 	private JFrame parent;
 
@@ -144,7 +144,7 @@ public class LootPanel extends JPanel {
 		// Création du panel contenant les boutons de résultat
 		JPanel pGenerer = new JPanel();
 
-		cTri = new JCheckBox("Upgrade uniquement");
+		cTri = new JCheckBox("Upgrade/2P/4P uniquement");
 		cTri.setSelected(true);
 
 		// Création du jbutton de génération du récap
@@ -528,7 +528,10 @@ public class LootPanel extends JPanel {
 			boolean last;
 			boss = "";
 			for (Loot l : lLoot) {
-				if (l.getRaison().equals("Upgrade") || !cTri.isSelected()) {
+				if (l.getRaison().equals("Upgrade")
+						|| l.getRaison().equals("2 Part")
+						|| l.getRaison().equals("4 Part")
+						|| !cTri.isSelected()) {
 					last = boss.equals(l.getBoss());
 
 					if (!last) {
@@ -548,12 +551,12 @@ public class LootPanel extends JPanel {
 					}
 
 					switch (l.getRaison()) {
-					case "Upgrade":
-						r += "Spé1";
-						break;
-					default:
-						r += l.getRaison();
-						break;
+						case "Upgrade":
+							r += "Spé1";
+							break;
+						default:
+							r += l.getRaison();
+							break;
 					}
 
 					boss = l.getBoss();
