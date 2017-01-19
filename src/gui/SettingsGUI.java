@@ -31,6 +31,7 @@ public class SettingsGUI extends JFrame {
 		
 		// On récupère le fichier de propriété
 		String regex;
+		int refNumber, refIlvl, ninjacupBase;
 		try(
 			FileInputStream fins = new FileInputStream("raid-management.properties");
 		) {
@@ -39,6 +40,9 @@ public class SettingsGUI extends JFrame {
 			
 			// On récupére l'expression régulière des loots
 			regex = props.getProperty("loot.regex");
+			refNumber = Integer.parseInt(props.getProperty("loot.refNumber"));
+			refIlvl = Integer.parseInt(props.getProperty("loot.refIlvl"));
+			ninjacupBase = Integer.parseInt(props.getProperty("loot.ninjacupBase"));
 		} catch (IOException ex) {
 			// Si le fichier n'existe pas alors on récupère l'info dans notre fichier
 			ResourceBundle bundle = ResourceBundle.getBundle("config");

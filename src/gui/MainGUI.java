@@ -32,8 +32,8 @@ import business.Loot;
 
 public class MainGUI extends JFrame {
 	public enum State {LOOT, COMPO};
-	static final int HEIGHT = 600;
-	static final int WIDTH = 800;
+	static final int HEIGHT = 700;
+	static final int WIDTH = 900;
 	
 	private State state;
 	

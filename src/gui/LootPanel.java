@@ -7,12 +7,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,6 +36,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -244,6 +248,33 @@ public class LootPanel extends JPanel {
 		pDiff.add(lDiff, BorderLayout.WEST);
 		pDiff.add(cbDiff, BorderLayout.EAST);
 		pDiff.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+		
+		// Création du textfield pour l'ilvl
+		JPanel pIlvl = new JPanel(new BorderLayout());
+		JLabel lIlvl = new JLabel("Ilvl de l'item *:");
+		JTextField tIlvl = new JTextField("", 15);
+		tIlvl.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if (e.getKeyChar() < '0' || e.getKeyChar() > '9') {
+					e.consume();
+				}
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+
+			}
+		});
+		pItemId.add(lIlvl, BorderLayout.WEST);
+		pItemId.add(tIlvl, BorderLayout.EAST);
+		pItemId.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
 		// Création du bouton ajouter
 		JButton bAjout = new JButton("Ajouter");
@@ -309,7 +340,7 @@ public class LootPanel extends JPanel {
 
 		if (r == JOptionPane.NO_OPTION) {
 			int itemId = -1;
-			int bonus = -1;
+			String bonus = "";
 
 			if (!tItemId.getText().equals("")) {
 				try {
@@ -320,15 +351,11 @@ public class LootPanel extends JPanel {
 			}
 
 			if (!tItemBonus.getText().equals("")) {
-				try {
-					bonus = Integer.parseInt(tItemBonus.getText());
-				} catch (NumberFormatException e) {
-					bonus = -1;
-				}
+				bonus = tItemBonus.getText();
 			}
 
 			Loot l = new Loot(tNomJoueur.getText(), new Date(), tNomItem.getText(), itemId, bonus, tNomBoss.getText(),
-					(String) cbDiff.getSelectedItem(), (String) cbUp.getSelectedItem());
+					(String) cbDiff.getSelectedItem(), (String) cbUp.getSelectedItem(), false, Integer.parseInt(tIlvl.getText()));
 			ajoutLoot(l);
 		}
 	}
@@ -393,6 +420,32 @@ public class LootPanel extends JPanel {
 				}
 
 			});
+			
+			JTextField jIlvl = new JTextField(3);
+			jIlvl.addKeyListener(new KeyListener() {
+				
+				@Override
+				public void keyTyped(KeyEvent e) {
+					if (e.getKeyChar() < '0' || e.getKeyChar() > '9') {
+						e.consume();
+						return;
+					}
+					
+					if (!jIlvl.getText().equals("")) {
+						l.setIlvl(Integer.parseInt(jIlvl.getText()));
+					}
+				}
+				
+				@Override
+				public void keyReleased(KeyEvent e) {
+					
+				}
+				
+				@Override
+				public void keyPressed(KeyEvent e) {
+
+				}
+			});
 
 			JButton bSup = new JButton("X");
 			bSup.setForeground(Color.RED);
@@ -413,6 +466,13 @@ public class LootPanel extends JPanel {
 			left.add(date);
 			left.add(Box.createRigidArea(new Dimension(10, 0)));
 			left.add(lBoss);
+			if (l.isSet()) {
+				left.add(Box.createRigidArea(new Dimension(10, 0)));
+				left.add(jIlvl);
+			} else {
+				left.add(Box.createRigidArea(new Dimension(10, 0)));
+				left.add(new JLabel(String.valueOf(l.getIlvl())));
+			}
 			left.add(Box.createRigidArea(new Dimension(10, 0)));
 			left.add(lItem);
 
@@ -425,6 +485,7 @@ public class LootPanel extends JPanel {
 		}
 
 		parent.pack();
+		showList();
 	}
 
 	private void parse() {
@@ -459,21 +520,23 @@ public class LootPanel extends JPanel {
 			while ((line = bufRead.readLine()) != null) {
 				Matcher matcher = pattern.matcher(line);
 				if (matcher.find()) {
-					// On récupére la date
+					// On récupère la date
 					Date date = new SimpleDateFormat("dd/MM/yy hh:mm:ss", Locale.FRENCH).parse(matcher.group(2) + " " + matcher.group(3));
 
-					// On récupére l'éventuel bonus de l'item
-					int bonus = matcher.group(4) == null || matcher.group(4).equals("") ? -1 : Integer.parseInt(matcher.group(4));
+					// On récupère l'éventuel bonus de l'item
+					String bonus = matcher.group(4) == null ? "" : matcher.group(4);
 
-					// On check si on aurait pas le mode "Passer automatiquement"
-					String raison = matcher.group(7);
+					// On check si on est dans le mode "Passer automatiquement"
+					String raison = matcher.group(8);
 					if (raison.startsWith("Passer")) {
 						raison = "Passer";
 					} else if (raison.startsWith("Hors ligne")) {
 						raison = "Hors ligne";
 					}
+					
+					boolean set = matcher.group(5) == null || matcher.group(5).equals("") ? true : false;
 
-					Loot loot = new Loot(matcher.group(1), date, matcher.group(5), Integer.parseInt(matcher.group(6)), bonus, matcher.group(9), matcher.group(8), raison);
+					Loot loot = new Loot(matcher.group(1), date, matcher.group(6), Integer.parseInt(matcher.group(7)), bonus, matcher.group(10), matcher.group(9), raison, set, 870);
 
 					lLoot.add(loot);
 					Collections.sort(lLoot);
@@ -544,7 +607,7 @@ public class LootPanel extends JPanel {
 
 					if (l.getItemID() != -1) {
 						r += "[url=http://fr.wowhead.com/item=" + l.getItemID()
-								+ (l.getBonus() != -1 ? "&bonus=" + l.getBonus() : "") + "][" + l.getItem()
+								+ (!l.getBonus().equals("") ? "&bonus=" + l.getBonus() : "") + "][" + l.getItem()
 								+ "][/url] ";
 					} else {
 						r += "[" + l.getItem() + "] ";
@@ -631,7 +694,7 @@ public class LootPanel extends JPanel {
 
 								if (l.getItemID() != -1) {
 									nm += "[url=http://fr.wowhead.com/item=" + l.getItemID()
-											+ (l.getBonus() != -1 ? "&bonus=" + l.getBonus() : "") + "][" + l.getItem()
+											+ (!l.getBonus().equals("") ? "&bonus=" + l.getBonus() : "") + "][" + l.getItem()
 											+ "][/url] ";
 								} else {
 									nm += "[" + l.getItem() + "] ";
@@ -643,7 +706,7 @@ public class LootPanel extends JPanel {
 
 								if (l.getItemID() != -1) {
 									hm += "[url=http://fr.wowhead.com/item=" + l.getItemID()
-											+ (l.getBonus() != -1 ? "&bonus=" + l.getBonus() : "") + "][" + l.getItem()
+											+ (!l.getBonus().equals("") ? "&bonus=" + l.getBonus() : "") + "][" + l.getItem()
 											+ "][/url] ";
 								} else {
 									hm += "[" + l.getItem() + "] ";
@@ -655,7 +718,7 @@ public class LootPanel extends JPanel {
 
 								if (l.getItemID() != -1) {
 									mm += "[url=http://fr.wowhead.com/item=" + l.getItemID()
-											+ (l.getBonus() != -1 ? "&bonus=" + l.getBonus() : "") + "][" + l.getItem()
+											+ (!l.getBonus().equals("") ? "&bonus=" + l.getBonus() : "") + "][" + l.getItem()
 											+ "][/url] ";
 								} else {
 									mm += "[" + l.getItem() + "] ";
@@ -709,5 +772,11 @@ public class LootPanel extends JPanel {
 	public void setlLoot(ArrayList<Loot> lLoot) {
 		this.lLoot = lLoot;
 		this.refreshListe();
+	}
+	
+	public void showList() {
+		for(Loot l : lLoot) {
+			System.out.println(l);
+		}
 	}
 }
