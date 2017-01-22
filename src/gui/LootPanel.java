@@ -449,6 +449,9 @@ public class LootPanel extends JPanel {
 
 				}
 			});
+			if (l.getIlvl() != -1) {
+				jIlvl.setText(String.valueOf(l.getIlvl()));
+			}
 
 			JButton bSup = new JButton("X");
 			bSup.setForeground(Color.RED);
