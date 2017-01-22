@@ -204,14 +204,14 @@ public class MainGUI extends JFrame {
 		// JMenu Aide
 		JMenu menuAide = new JMenu("Aide");
 
-		JMenuItem menuItemAPropos = new JMenuItem("Ã€ propos...");
+		JMenuItem menuItemAPropos = new JMenuItem("À propos...");
 		menuItemAPropos.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(MainGUI.this,
 						"Application réalisée par Adragonà-Uldaman.\n\nTéléchargement: https://github.com/Mickhopes/RaidManagement/releases\nSource code: https://github.com/Mickhopes/RaidManagement",
-						"Ã€ propos", JOptionPane.INFORMATION_MESSAGE);
+						"À propos", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 
