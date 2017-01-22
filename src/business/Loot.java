@@ -8,12 +8,14 @@ public class Loot implements Comparable<Loot>, Serializable {
 	private Date dateLoot;
 	private String item;
 	private int itemID;
-	private int bonus;
+	private String bonus;
 	private String boss;
 	private String difficulte;
 	private String raison;
+	private boolean set;
+	private int ilvl;
 
-	public Loot(String joueur, Date dateLoot, String item, int itemID, int bonus, String boss, String difficulte, String raison) {
+	public Loot(String joueur, Date dateLoot, String item, int itemID, String bonus, String boss, String difficulte, String raison, boolean set, int ilvl) {
 		this.joueur = joueur;
 		this.dateLoot = dateLoot;
 		this.item = item;
@@ -22,6 +24,8 @@ public class Loot implements Comparable<Loot>, Serializable {
 		this.boss = boss;
 		this.difficulte = difficulte;
 		this.raison = raison;
+		this.set = set;
+		this.ilvl = ilvl;
 	}
 
 	public String getJoueur() {
@@ -56,11 +60,11 @@ public class Loot implements Comparable<Loot>, Serializable {
 		this.itemID = itemID;
 	}
 
-	public int getBonus() {
+	public String getBonus() {
 		return bonus;
 	}
 
-	public void setBonus(int bonus) {
+	public void setBonus(String bonus) {
 		this.bonus = bonus;
 	}
 
@@ -87,10 +91,35 @@ public class Loot implements Comparable<Loot>, Serializable {
 	public void setRaison(String raison) {
 		this.raison = raison;
 	}
+	
+	public boolean isSet() {
+		return this.set;
+	}
+	
+	public void setSet(boolean set) {
+		this.set = set;
+	}
+
+	public int getIlvl() {
+		return ilvl;
+	}
+
+	public void setIlvl(int ilvl) {
+		this.ilvl = ilvl;
+	}
 
 	@Override
 	public String toString() {
-		return this.joueur + ", " + this.dateLoot + ", " + this.item + ", " + this.itemID + ", " + this.bonus + ", " + this.boss + ", " + this.difficulte + ", " + this.raison;
+		return this.joueur + ", " + 
+				this.dateLoot + ", " + 
+				this.item + ", " + 
+				this.itemID + ", " + 
+				this.bonus + ", " + 
+				this.boss + ", " + 
+				this.difficulte + ", " + 
+				this.raison + ", " +
+				this.set + ", " +
+				this.ilvl;
 	}
 
 	@Override
