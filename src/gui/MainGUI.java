@@ -64,7 +64,7 @@ public class MainGUI extends JFrame {
 					case LOOT:
 						if (lootPanel.getlLoot().isEmpty() || saveFile == null) {
 							JOptionPane.showMessageDialog(MainGUI.this,
-									"Aucun loot √† sauvegarder !",
+									"Aucun loot ‡ sauvegarder !",
 									"Attention", JOptionPane.WARNING_MESSAGE);
 							return;
 						}
@@ -98,7 +98,7 @@ public class MainGUI extends JFrame {
 					case LOOT:
 						if (lootPanel.getlLoot().isEmpty()) {
 							JOptionPane.showMessageDialog(MainGUI.this,
-									"Aucun loot √† sauvegarder !",
+									"Aucun loot ‡ sauvegarder !",
 									"Attention", JOptionPane.WARNING_MESSAGE);
 							return;
 						}
@@ -210,7 +210,7 @@ public class MainGUI extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(MainGUI.this,
-						"Application r√©alis√©e par Adragon√†-Uldaman.\n\nT√©l√©chargement: https://github.com/Mickhopes/RaidManagement/releases\nSource code: https://github.com/Mickhopes/RaidManagement",
+						"Application rÈalisÈe par Adragon‡-Uldaman.\n\nTÈlÈchargement: https://github.com/Mickhopes/RaidManagement/releases\nSource code: https://github.com/Mickhopes/RaidManagement",
 						"√Ä propos", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
@@ -220,7 +220,7 @@ public class MainGUI extends JFrame {
 
 		setJMenuBar(menuBar);
 
-		// Cr√©ation des onglets
+		// CrÈation des onglets
 		JTabbedPane onglets = new JTabbedPane(SwingConstants.TOP);
 
 		onglets.add("Loot", lootPanel);
