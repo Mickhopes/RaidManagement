@@ -545,22 +545,22 @@ public class LootPanel extends JPanel {
 					boolean set;
 					int ilvl;
 					String bonus = "";
-					if (matcher.group(5) == null || matcher.group(5).equals("")) {
+					if (matcher.group(7) == null || matcher.group(7).equals("")) {
 						set = true;
 						ilvl = -1;
 					} else {
 						set = false;
-						ilvl = Integer.parseInt(matcher.group(5)) - refNumber + refIlvl;
-						bonus = matcher.group(5);
+						ilvl = Integer.parseInt(matcher.group(7)) - refNumber + refIlvl;
+						bonus = matcher.group(7);
 					}
 					
 					
 					// On récupère l'éventuel bonus de l'item
-					if (matcher.group(4) != null && !matcher.group(4).equals("")) {
-						bonus += ":" + matcher.group(4);
+					if (matcher.group(6) != null && !matcher.group(6).equals("")) {
+						bonus += ":" + matcher.group(6);
 					}
 
-					Loot loot = new Loot(matcher.group(1), date, matcher.group(6), Integer.parseInt(matcher.group(7)), bonus, matcher.group(10), matcher.group(9), raison, set, ilvl);
+					Loot loot = new Loot(matcher.group(1), date, matcher.group(4), Integer.parseInt(matcher.group(5)), bonus, matcher.group(10), matcher.group(9), raison, set, ilvl);
 
 					lLoot.add(loot);
 					Collections.sort(lLoot);
@@ -756,7 +756,7 @@ public class LootPanel extends JPanel {
 					String mm = "";
 					for (Loot l : lLoot) {
 						if (joueur.equals(l.getJoueur())) {
-							if (l.getRaison().equals("Upgrade")) {
+							if (l.getRaison().equals("Upgrade") || l.getRaison().equals("2 Part") || l.getRaison().equals("4 Part")) {
 								switch (l.getDifficulte()) {
 								case "Normal":
 									nbNm++;
